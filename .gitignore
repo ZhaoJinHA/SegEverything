@@ -1,0 +1,17 @@
+<<<<<<< HEAD
+*.pyc
+data/
+__pycache__/
+checkpoints/
+*.pth
+*.jpg
+SUBMISSION*
+=======
+*.pyc
+data/
+__pycache__/
+checkpoints/
+*.pth
+*.jpg
+SUBMISSION*
+>>>>>>> first commit
