@@ -17,18 +17,16 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 - python >= 3.6
 - installing labelme [https://gist.github.com/erniejunior/601cdf56d2b424757de5]
 
-- installing Pytorch-unet [https://github.com/milesial/Pytorch-UNet]
-
 - pytorch with version >= 0.4.1
 
-- skimage, PIL
+- skimage, PIL, [pydensecrf](https://github.com/lucasb-eyer/pydensecrf)(installed with pip)
 
   
 
 ## Reference website
 
-- the semantic segmentation code is from pytorch-unet [https://github.com/milesial/Pytorch-UNet]
-- img_distortion part of database generation code is from [https://gist.github.com/erniejunior/601cdf56d2b424757de5]
+- the semantic segmentation code is modified from pytorch-unet [https://github.com/milesial/Pytorch-UNet]
+- img_distortion part of database generation code is modified from [https://gist.github.com/erniejunior/601cdf56d2b424757de5]
 
 
 
