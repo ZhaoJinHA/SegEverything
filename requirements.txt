@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 matplotlib
 pydensecrf
 numpy
 Pillow
 torch
 torchvision
-=======
-matplotlib
-pydensecrf
-numpy
-Pillow
-torch
-torchvision
->>>>>>> first commit
