@@ -12,12 +12,14 @@ def get_square(img, pos):
         return img[:, -h:]
 
 def split_img_into_squares(img):
+    """ img with size: (H, W, C) """
     return get_square(img, 0), get_square(img, 1)
 
 def hwc_to_chw(img):
     return np.transpose(img, axes=[2, 0, 1])
 
-def resize_and_crop(pilimg, scale=0.5, final_height=None):
+def resize_and_crop(pilimg, scale=1, final_height=None):
+    """ imput PIL format image, output with np.array np.floa32 type, with max 255 """
     w = pilimg.size[0]
     h = pilimg.size[1]
     newW = int(w * scale)
@@ -28,12 +30,15 @@ def resize_and_crop(pilimg, scale=0.5, final_height=None):
     else:
         diff = newH - final_height
 
-    img = pilimg.resize((newW, newH))
+    if not scale == 1:
+        img = pilimg.resize((newW, newH))
+    else:
+        img = pilimg
     img = img.crop((0, diff // 2, newW, newH - diff // 2))
     return np.array(img, dtype=np.float32)
 
-def resize_and_crop_masks(masksarray, scale=0.5, final_height=None):
-
+def resize_and_crop_masks(masksarray, scale=1, final_height=None):
+    """ input with nparray with size (H, W, C) and range (0,1), output with np.array np.floa32 type, with max 1 """
 
     h = masksarray.shape[0]
     w = masksarray.shape[1]
@@ -51,13 +56,33 @@ def resize_and_crop_masks(masksarray, scale=0.5, final_height=None):
         diff = newH - final_height
     for iC in range(c):
         img = Image.fromarray(masksarray[...,iC])
-        img = img.resize((newW, newH))
+        if not scale==1:
+            img = img.resize((newW, newH))
         # print(img)
         img = img.crop((0, diff // 2, newW, newH - diff // 2))
         img = np.array(img, dtype=np.float32)
         maskout[...,iC] = img
     # print('maskout.shape', maskout.shape)
     return maskout
+
+def resize_np(nparray, scale=0.5):
+    """resize a (H, W, C) like numpy array, using PIL.reisze, return"""
+    h = nparray.shape[0]
+    w = nparray.shape[1]
+    c = nparray.shape[2]
+    # print('masksarray.shape', masksarray.shape)
+    newW = int(w * scale)
+    newH = int(h * scale)
+    maskout = np.zeros((newH, newW, c))
+    for iC in range(c):
+        img = Image.fromarray(nparray[...,iC])
+        if not scale==1:
+            img = img.resize((newW, newH))
+
+        img = np.array(img)
+        maskout[...,iC] = img
+    return maskout
+
 
 
 def batch(iterable, batch_size):
@@ -84,11 +109,15 @@ def normalize(x):
     return x / 255
 
 def merge_masks(img1, img2, full_w):
-    h = img1.shape[0]
-
-    new = np.zeros((h, full_w), np.float32)
-    new[:, :full_w // 2 + 1] = img1[:, :full_w // 2 + 1]
-    new[:, full_w // 2 + 1:] = img2[:, -(full_w // 2 - 1):]
+    """img1 and img2 with size(C, H, W)"""
+    h = img1.shape[1]
+    c = img1.shape[0]
+    
+    print('img1.shape', img1.shape)
+    print('img2.shape', img2.shape)
+    new = np.zeros((c, h, full_w), np.float32)
+    new[:, :, :full_w // 2 + 1] = img1[:, :, :full_w // 2 + 1]
+    new[:, :, full_w // 2 + 1:] = img2[:, :, -(full_w // 2 - 1):]
 
     return new
 

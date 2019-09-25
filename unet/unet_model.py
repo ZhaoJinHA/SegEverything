@@ -1,9 +1,9 @@
 # full assembly of the sub-parts to form the complete net
 
-import torch.nn.functional as F
+import torch.nn as nn 
 
 from .unet_parts import *
-
+import numpy as np
 class UNet(nn.Module):
     def __init__(self, n_channels, n_classes):
         super(UNet, self).__init__()
@@ -17,7 +17,7 @@ class UNet(nn.Module):
         self.up3 = up(256, 64)
         self.up4 = up(128, 64)
         self.outc = outconv(64, n_classes)
-
+        self.n_classes = n_classes
     def forward(self, x):
         x1 = self.inc(x)
         x2 = self.down1(x1)
@@ -29,4 +29,13 @@ class UNet(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
         x = self.outc(x)
-        return F.sigmoid(x)
+        if self.n_classes == 1:
+            outfun = nn.Sigmoid()
+        else:
+            outfun = nn.Softmax2d()
+        outx = outfun(x)
+        # xtest = outx.squeeze(0)
+        # xtest = xtest.cpu().numpy()
+        # xsum = np.sum(xtest, axis=0)
+        # print('xsum',xsum)
+        return outx

@@ -1,3 +1,4 @@
+
 import sys
 import os
 from optparse import OptionParser
@@ -11,9 +12,10 @@ from torch import optim
 from eval import eval_net
 from unet import UNet
 from utils import get_ids, split_ids, split_train_val, get_imgs_and_masks, batch
+from BCELoss_weight import BCELoss_weight
 
 def train_net(net,
-              epochs=5,
+              epochs=20,
               batch_size=1,
               lr=0.1,
               val_percent=0.05,
@@ -21,9 +23,10 @@ def train_net(net,
               gpu=True,
               img_scale=0.5):
 
-    dir_img = 'D:/Experiment_data/Tacoma Bridge/segdata/train/img'
-    dir_mask = 'D:/Experiment_data/Tacoma Bridge/segdata/train/mask'
-    dir_checkpoint = 'D:/Experiment_data/Tacoma Bridge/segdata/train/checkpoint'
+    dir_img = '/home/zhaojin/data/TacomaBridge/segdata/train/img'
+    dir_mask = '/home/zhaojin/data/TacomaBridge/segdata/train/mask'
+    dir_checkpoint = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/'
+
 
     ids = get_ids(dir_img)
     ids = split_ids(ids)
@@ -49,7 +52,8 @@ def train_net(net,
                           momentum=0.9,
                           weight_decay=0.0005)
 
-    criterion = nn.BCELoss()
+    classweight = [1,4,8,4]
+    criterion = BCELoss_weight(classweight)
 
     for epoch in range(epochs):
         print('Starting epoch {}/{}.'.format(epoch + 1, epochs))
@@ -60,11 +64,16 @@ def train_net(net,
         val = get_imgs_and_masks(iddataset['val'], dir_img, dir_mask, img_scale)
 
         epoch_loss = 0
-
+        
+        lr = lr*0.99
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = lr
+        print('lr', lr)
         for i, b in enumerate(batch(train, batch_size)):
             imgs = np.array([i[0] for i in b]).astype(np.float32)
             true_masks = np.array([i[1] for i in b])
-
+            
+            true_masks = np.transpose(true_masks, axes=[0,3,1,2])
             imgs = torch.from_numpy(imgs)
             true_masks = torch.from_numpy(true_masks)
 
@@ -75,23 +84,23 @@ def train_net(net,
             masks_pred = net(imgs)
             # print('masks_pred.shape',masks_pred.shape)
             # print('true_masks.shape', true_masks.shape)
-            masks_probs_flat = masks_pred.view(-1)
+            masks_probs_flat = masks_pred
 
-            true_masks_flat = true_masks.view(-1)
-
+            true_masks_flat = true_masks
             loss = criterion(masks_probs_flat, true_masks_flat)
             epoch_loss += loss.item()
 
             print('{0:.4f} --- loss: {1:.6f}'.format(i * batch_size / N_train, loss.item()))
 
+            
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
         print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
 
-        if 0:
-            val_dice = eval_net(net, val, gpu)
+        if 1:
+            val_dice = eval_net(net, val)
             print('Validation Dice Coeff: {}'.format(val_dice))
 
         if save_cp:
@@ -114,14 +123,21 @@ def get_args():
     parser.add_option('-c', '--load', dest='load',
                       default=False, help='load file model')
     parser.add_option('-s', '--scale', dest='scale', type='float',
-                      default=0.5, help='downscaling factor of the images')
+                      default=1, help='downscaling factor of the images')
 
     (options, args) = parser.parse_args()
     return options
 
 def train_1st():
     args = get_args()
-
+    args.epochs = 30
+    args.lr = 0.1
+    save_cp = True
+    args.load = ''
+    args.batchsize=20
+    args.scale=0.5
+    
+    args.gpu = True
     net = UNet(n_channels=1, n_classes=4)
 
     if args.load:
@@ -138,6 +154,7 @@ def train_1st():
                   batch_size=args.batchsize,
                   lr=args.lr,
                   gpu=args.gpu,
+                  save_cp = save_cp,
                   img_scale=args.scale)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
@@ -147,12 +164,17 @@ def train_1st():
         except SystemExit:
             os._exit(0)
 
+
+   
+    
+    
 def train_resume():
     args = get_args()
-    args.epochs = 10
-    args.lr = 0.01
+    args.epochs = 100
+    args.lr = 0.0075
     save_cp = True
-    args.load = 'D:/Experiment_data/Tacoma Bridge/segdata/train/checkpointCP15.pth'
+    args.load = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpointCP30.pth'
+    
     args.gpu = True
     net = UNet(n_channels=1, n_classes=4)
 
@@ -181,4 +203,4 @@ def train_resume():
             os._exit(0)
 
 if __name__ == '__main__':
-    train_resume()
+    train_1st()
