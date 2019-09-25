@@ -34,6 +34,6 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 
 - [x] convert the label from labelme format to numpy.npz format
 - [x] complete the data generation code
-- [ ] change the loss function in Pytorch-unet project from log loss function to weight loss function, and other modification
+- [x] change the loss function in Pytorch-unet project from log loss function to weight loss function, and other modification
 - [ ] make all the workflow more auto
 - [ ] make it work in Ubuntu
