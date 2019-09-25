@@ -18,15 +18,19 @@ def train_net(net,
               epochs=20,
               batch_size=1,
               lr=0.1,
+              lrd=0.99,
               val_percent=0.05,
               save_cp=True,
               gpu=True,
-              img_scale=0.5):
+              img_scale=0.5,
+              imagepath='',
+              maskpath='',
+              cpsavepath=''):
 
-    dir_img = '/home/zhaojin/data/TacomaBridge/segdata/train/img'
-    dir_mask = '/home/zhaojin/data/TacomaBridge/segdata/train/mask'
-    dir_checkpoint = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/'
-
+    dir_img = imagepath
+    dir_mask = maskpath
+    dir_checkpoint = cpsavepath
+    classweight = [1, 4, 8, 4]
 
     ids = get_ids(dir_img)
     ids = split_ids(ids)
@@ -52,7 +56,7 @@ def train_net(net,
                           momentum=0.9,
                           weight_decay=0.0005)
 
-    classweight = [1,4,8,4]
+    # classweight = [1,4,8,4]
     criterion = BCELoss_weight(classweight)
 
     for epoch in range(epochs):
@@ -65,7 +69,7 @@ def train_net(net,
 
         epoch_loss = 0
         
-        lr = lr*0.99
+        lr = lr*lrd
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr
         print('lr', lr)
@@ -112,31 +116,40 @@ def train_net(net,
 
 def get_args():
     parser = OptionParser()
-    parser.add_option('-e', '--epochs', dest='epochs', default=5, type='int',
+    parser.add_option('-e', '--epochs', dest='epochs', default=15, type='int',
                       help='number of epochs')
     parser.add_option('-b', '--batch-size', dest='batchsize', default=10,
                       type='int', help='batch size')
     parser.add_option('-l', '--learning-rate', dest='lr', default=0.1,
                       type='float', help='learning rate')
+    parser.add_option('-d', '--learning-rate-damping', dest='lrd', default=0.99,
+                      type='float', help='learning rate damping')
     parser.add_option('-g', '--gpu', action='store_true', dest='gpu',
                       default=True, help='use cuda')
     parser.add_option('-c', '--load', dest='load',
                       default=False, help='load file model')
     parser.add_option('-s', '--scale', dest='scale', type='float',
-                      default=1, help='downscaling factor of the images')
-
+                      default=0.5, help='downscaling factor of the images')
+    parser.add_option("-i", "--imagepath", default= '/home/zhaojin/data/TacomaBridge/segdata/train/img',
+                      action="store", type="string", dest="imagepath")
+    parser.add_option("-m", "--maskpath", default= '/home/zhaojin/data/TacomaBridge/segdata/train/mask',
+                      action="store", type="string", dest="maskpath")
+    parser.add_option("-v", "--checkpointsavepath", default= '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax_test/',
+                      action="store", type="string", dest="savepath")
     (options, args) = parser.parse_args()
     return options
 
-def train_1st():
-    args = get_args()
-    args.epochs = 30
-    args.lr = 0.1
+def train_1st(args):
+    # args = get_args()
+    # args.epochs = 30
+    # args.lr = 0.1
     save_cp = True
     args.load = ''
-    args.batchsize=20
-    args.scale=0.5
-    
+    # args.batchsize=20
+    # args.scale=0.5
+    imagepath=args.imagepath
+    maskpath=args.maskpath
+    cpsavepath = args.savepath
     args.gpu = True
     net = UNet(n_channels=1, n_classes=4)
 
@@ -155,7 +168,10 @@ def train_1st():
                   lr=args.lr,
                   gpu=args.gpu,
                   save_cp = save_cp,
-                  img_scale=args.scale)
+                  img_scale=args.scale,
+                  imagepath=imagepath,
+                  maskpath=maskpath,
+                  cpsavepath=cpsavepath)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
         print('Saved interrupt')
@@ -203,4 +219,5 @@ def train_resume():
             os._exit(0)
 
 if __name__ == '__main__':
-    train_1st()
+    args = get_args()
+    train_1st(args)

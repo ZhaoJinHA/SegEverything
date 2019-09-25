@@ -22,7 +22,7 @@ def predict_img(net,
                 out_threshold=0.5,
                 use_dense_crf=True,
                 use_gpu=True):
-  
+    """return fullmask with size (C, H, W)"""
     net.eval()
     img_height = full_img.size[1]
     img_width = full_img.size[0]
@@ -192,31 +192,51 @@ def main():
     return mask
 
 if __name__ == "__main__":
-    mask = main()
-    mask = np.array(mask*255,dtype='uint8')
-    masktest = np.zeros((mask.shape[1], mask.shape[2]))
-    masktest = mask[0,...] + mask[1,...]+mask[2,...]
-    print('masktest.shape', masktest.shape)
-    print('masktest', masktest)
-    print(mask)
-    print('np.max(mask)',np.max(mask))
-    print('mask.shape', mask.shape)
-    fig = plt.figure()
-    ax = fig.add_subplot(221)
-    ax.imshow(mask[0,:,:])
-    ax.set_aspect(1)
+    """example:  python predict.py --model '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/CP30.pth' --input '/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' --viz"""
+    args = get_args()
+    # args.model = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/logloss_softmax/CP12.pth'
+    # in_files = ['/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' ]
+    # out_files = ['/home/zhaojin/my_path/dir/segdata/predict/00025.png']
+    in_files = args.input
+    net = UNet(n_channels=1, n_classes=4)
 
-    ax2 = fig.add_subplot(222)
-    ax2.imshow(mask[1,:,:])
-    ax2.set_aspect(1)
+    print("Loading model {}".format(args.model))
 
-    ax3 = fig.add_subplot(223)
-    ax3.imshow(mask[2,:,:])
-    ax3.set_aspect(1)
-    ax4 = fig.add_subplot(224)
-    ax4.imshow(mask[3,:,:])
-    ax4.set_aspect(1)
+    if not args.cpu:
+        print("Using CUDA version of the net, prepare your GPU !")
+        net.cuda()
+        net.load_state_dict(torch.load(args.model))
+    else:
+        net.cpu()
+        net.load_state_dict(torch.load(args.model, map_location='cpu'))
+        print("Using CPU version of the net, this may be very slow")
 
+    print("Model loaded !")
 
+    for i, fn in enumerate(in_files):
+        print("\nPredicting image {} ...".format(fn))
 
-    plt.show()
+        img = Image.open(fn)
+        if img.size[0] < img.size[1]:
+            print("Error: image height larger than the width")
+
+        mask = predict_img(net=net,
+                           full_img=img,
+                           scale_factor=args.scale,
+                           out_threshold=args.mask_threshold,
+                           use_dense_crf= not args.no_crf,
+                           use_gpu=not args.cpu)
+
+        if args.viz:
+            print("Visualizing results for image {}, close to continue ...".format(fn))
+            mask = np.transpose(mask, axes=[1,2,0])
+            plot_img_and_mask(img, mask)
+        # if not args.no_save:
+        #     out_fn = out_files[i]
+        #     print('mask', mask)
+        #     result = mask_to_image(mask)
+        #
+        #     result.save(out_files[i])
+        #
+        #     print("Mask saved to {}".format(out_files[i]))
+

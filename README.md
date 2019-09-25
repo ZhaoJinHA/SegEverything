@@ -21,7 +21,12 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 
 - skimage, PIL, [pydensecrf](https://github.com/lucasb-eyer/pydensecrf) (installed with pip)
 
-  
+## Usage
+- To predict a picture: example
+ python predict.py --model 'path/to/model.pth' --input 'path/to/image/to/predict' --viz
+- To train a net: example
+1. python train.py -i 'path/to/image/' -m 'path/to/masks' -v 'checkpointsavepath' -l 0.1 -d 0.99 -e 30 -b 10
+2. python train.py -i 'path/to/image/' -m 'path/to/masks' -v 'path/to/save/checkpoin'
 
 ## Reference website
 
