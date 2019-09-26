@@ -24,6 +24,8 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 ## Usage
 - To predict a picture: example
  python predict.py --model 'path/to/model.pth' --input 'path/to/image/to/predict' --viz
+- To predict pictures from a video (size same size)
+ python predict_batch.py --model 'path/to/model' --input 'path/to/images/' --output 'path/to/path/to/save/result'
 - To train a net: example
 1. python train.py -i 'path/to/image/' -m 'path/to/masks' -v 'checkpointsavepath' -l 0.1 -d 0.99 -e 30 -b 10
 2. python train.py -i 'path/to/image/' -m 'path/to/masks' -v 'path/to/save/checkpoin'

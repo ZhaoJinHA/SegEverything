@@ -15,6 +15,11 @@ def split_img_into_squares(img):
     """ img with size: (H, W, C) """
     return get_square(img, 0), get_square(img, 1)
 
+def split_img_into_squares_batch(img):
+    """ img with size: (N, H, W, C) """
+    h = img.shape[1]
+    return img[:, :, :h, :], img[:, :, -h:, :]
+
 def hwc_to_chw(img):
     return np.transpose(img, axes=[2, 0, 1])
 
@@ -112,15 +117,24 @@ def merge_masks(img1, img2, full_w):
     """img1 and img2 with size(C, H, W)"""
     h = img1.shape[1]
     c = img1.shape[0]
-    
-    print('img1.shape', img1.shape)
-    print('img2.shape', img2.shape)
+
     new = np.zeros((c, h, full_w), np.float32)
     new[:, :, :full_w // 2 + 1] = img1[:, :, :full_w // 2 + 1]
     new[:, :, full_w // 2 + 1:] = img2[:, :, -(full_w // 2 - 1):]
 
     return new
 
+
+def merge_masks_batch(img1, img2, full_w):
+    """img1 and img2 with size(N, C, H, W)"""
+    h = img1.shape[2]
+    c = img1.shape[1]
+    n = img1.shape[0]
+    new = np.zeros((n, c, h, full_w), np.float32)
+    new[:, :, :, :full_w // 2 + 1] = img1[:, :, :, :full_w // 2 + 1]
+    new[:, :, :, full_w // 2 + 1:] = img2[:, :, :, -(full_w // 2 - 1):]
+
+    return new
 
 # credits to https://stackoverflow.com/users/6076729/manuel-lagunas
 def rle_encode(mask_image):

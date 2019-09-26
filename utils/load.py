@@ -1,14 +1,14 @@
 #
 # load.py : utils on generators / lists of ids to transform from strings to
 #           cropped images and masks
-
+import torch
 import os
 
 import numpy as np
 from PIL import Image
 
 from .utils import resize_and_crop, resize_and_crop_masks, normalize, hwc_to_chw, get_square
-
+from torch.utils import data
 
 def get_ids(dir):
     """Returns a list of the ids in the directory"""
@@ -57,3 +57,37 @@ def get_full_img_and_mask(id, dir_img, dir_mask):
     im = Image.open(dir_img + id + '.jpg')
     mask = Image.open(dir_mask + id + '_mask.gif')
     return np.array(im), np.array(mask)
+
+
+class Dataset_predict(data.Dataset):
+    'Characterizes a dataset for PyTorch'
+    'input paths of img and labels, output with img size (H, W, C), label (H ,W, C)'
+    'input imgname :   00034.png'
+    'input labelname:  00034_mask.npz'
+
+    def __init__(self, imgpath, inputtype="L", scale=0.5):
+        'Initialization'
+
+        self.imgpath = imgpath
+        self.imgids = [f for f in os.listdir(imgpath)]
+        self.inputtype = inputtype
+        self.scale = scale
+
+    def __len__(self):
+        'Denotes the total number of samples'
+        return len(self.imgids)
+
+    def __getitem__(self, index):
+        'Generates one sample of data'
+        # Select sample
+        imgid = self.imgids[index]
+        img = Image.open(self.imgpath + '/' + imgid).convert(self.inputtype)
+        w, h = img.size
+        neww, newh = int(w*self.scale), int(h*self.scale)
+        img = img.resize((neww, newh), Image.ANTIALIAS)
+        img = np.array(img)
+        if len(img.shape) == 2:
+            img = img[..., np.newaxis]
+        img = normalize(img)
+        return img, imgid
+
