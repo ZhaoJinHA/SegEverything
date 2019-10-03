@@ -165,14 +165,14 @@ def predict_img_batch(net,
     # return left_mask_np
 
 
-def get_args():
+def get_args(raw_args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', '-m', default='MODEL.pth',
                         metavar='FILE',
                         help="Specify the file in which is stored the model"
                              " (default : 'MODEL.pth')")
     parser.add_argument('--input', '-i', metavar='INPUT', nargs='+',
-                        help='filenames of input images', required=True)
+                        help='filenames of input images')
 
     parser.add_argument('--output', '-o', metavar='INPUT', nargs='+',
                         help='filenames of ouput images')
@@ -195,7 +195,7 @@ def get_args():
                         help="Scale factor for the input images",
                         default=0.5)
 
-    return parser.parse_args()
+    return parser.parse_args(raw_args)
 
 def get_output_filenames(args):
     in_files = args.input
@@ -216,8 +216,8 @@ def get_output_filenames(args):
 def mask_to_image(mask):
     return Image.fromarray((mask * 255).astype(np.uint8))
 
-def main():
-    args = get_args()
+def main(raw_args):
+    args = get_args(raw_args)
     args.model = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/logloss_softmax/CP12.pth' 
     in_files = ['/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' ]
     out_files = ['/home/zhaojin/my_path/dir/segdata/predict/00025.png']
@@ -265,9 +265,10 @@ def main():
 
     return mask
 
-if __name__ == "__main__":
+def main(raw_args=None):
     """example:  python predict.py --model '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/CP30.pth' --input '/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' --viz"""
-    args = get_args()
+    args = get_args(raw_args)
+    print('args', args )
     # args.model = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/logloss_softmax/CP12.pth'
     # in_files = ['/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' ]
     # out_files = ['/home/zhaojin/my_path/dir/segdata/predict/00025.png']
@@ -314,3 +315,5 @@ if __name__ == "__main__":
         #
         #     print("Mask saved to {}".format(out_files[i]))
 
+if __name__ == "__main__":
+    main()

@@ -67,10 +67,10 @@ class object_transformation():
         return self.obj
 
 def main():
-    imgroot = 'Y:\script\imagetest\image'
-    img = Image.open(os.path.join(imgroot,"frame3.png")).convert("RGB")
+
+    img = Image.open('/home/zhaojin/data/TacomaBridge/segdata/train/img/00000.png').convert("L")
     img = np.array(img)
-    img_mask = np.load(os.path.join(imgroot,"ml_lbl2.npz"))['arr_0']
+    img_mask = np.load('/home/zhaojin/data/TacomaBridge/segdata/train/mask/00000_mask.npz')['label']
 
     # print('img_mask.shape',img_mask.shape)
     # print('np.max(img_mask)',np.max(img_mask))
@@ -92,11 +92,11 @@ def main():
 
     fig = plt.figure()
     ax = fig.add_subplot(121)
-    ax.imshow(img)
+    ax.imshow(img_maskout[...,0])
     ax.set_aspect(1)
 
     ax = fig.add_subplot(122)
-    ax.imshow(imgout)
+    ax.imshow(imgout[...,0])
     ax.set_aspect(1)
 
 

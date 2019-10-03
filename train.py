@@ -30,12 +30,14 @@ def train_net(net,
     dir_img = imagepath
     dir_mask = maskpath
     dir_checkpoint = cpsavepath
-    classweight = [1, 4, 8, 4]
+    classweight = [1, 2, 3, 2]
 
     ids = get_ids(dir_img)
     ids = split_ids(ids)
 
     iddataset = split_train_val(ids, val_percent)
+
+    logname = cpsavepath + '/' + 'losslog.txt'
 
     print('''
     Starting training:
@@ -61,6 +63,8 @@ def train_net(net,
 
     for epoch in range(epochs):
         print('Starting epoch {}/{}.'.format(epoch + 1, epochs))
+        with open(logname, "a") as f:
+            f.write('Starting epoch {}/{}.'.format(epoch + 1, epochs) + "\n")
         net.train()
 
         # reset the generators
@@ -94,27 +98,35 @@ def train_net(net,
             loss = criterion(masks_probs_flat, true_masks_flat)
             epoch_loss += loss.item()
 
-            print('{0:.4f} --- loss: {1:.6f}'.format(i * batch_size / N_train, loss.item()))
+            printinfo = '{0:.4f} --- loss: {1:.6f}'.format(i * batch_size / N_train, loss.item())
+            print(printinfo)
 
-            
+            with open(logname, "a") as f:
+                f.write(printinfo + "\n")
+
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
         print('Epoch finished ! Loss: {}'.format(epoch_loss / i))
-
+        with open(logname, "a") as f:
+            f.write('Epoch finished ! Loss: {}'.format(epoch_loss / i) + "\n")
         if 1:
             val_dice = eval_net(net, val)
             print('Validation Dice Coeff: {}'.format(val_dice))
+            with open(logname, "a") as f:
+                f.write('Validation Dice Coeff: {}'.format(val_dice) + "\n")
 
         if save_cp:
             torch.save(net.state_dict(),
                        dir_checkpoint + 'CP{}.pth'.format(epoch + 1))
             print('Checkpoint {} saved !'.format(epoch + 1))
+            with open(logname, "a") as f:
+                f.write('Checkpoint {} saved !'.format(epoch + 1) + "\n")
 
 
 
-def get_args():
+def get_args(raw_args=None):
     parser = OptionParser()
     parser.add_option('-e', '--epochs', dest='epochs', default=15, type='int',
                       help='number of epochs')
@@ -136,11 +148,11 @@ def get_args():
                       action="store", type="string", dest="maskpath")
     parser.add_option("-v", "--checkpointsavepath", default= '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax_test/',
                       action="store", type="string", dest="savepath")
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(raw_args)
     return options
 
-def train_1st(args):
-    # args = get_args()
+def train_1st(raw_args=None):
+    args = get_args(raw_args)
     # args.epochs = 30
     # args.lr = 0.1
     save_cp = True
@@ -166,6 +178,7 @@ def train_1st(args):
                   epochs=args.epochs,
                   batch_size=args.batchsize,
                   lr=args.lr,
+                  lrd=args.lrd,
                   gpu=args.gpu,
                   save_cp = save_cp,
                   img_scale=args.scale,
@@ -219,5 +232,4 @@ def train_resume():
             os._exit(0)
 
 if __name__ == '__main__':
-    args = get_args()
-    train_1st(args)
+    train_1st()

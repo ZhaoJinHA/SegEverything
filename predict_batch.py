@@ -99,7 +99,7 @@ def predict_img_batch(net,
     # return full_mask
     # # return left_mask_np
 
-def get_args():
+def get_args(raw_args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', '-m', default='MODEL.pth',
                         metavar='FILE',
@@ -129,7 +129,7 @@ def get_args():
                         help="Scale factor for the input images",
                         default=0.5)
 
-    return parser.parse_args()
+    return parser.parse_args(raw_args)
 
 def get_output_filenames(args):
     in_files = args.input
@@ -151,9 +151,9 @@ def mask_to_image(mask):
     return Image.fromarray((mask * 255).astype(np.uint8))
 
 
-if __name__ == "__main__":
+def main(raw_args=None):
     """example:  python predict_batch.py --model '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/CP30.pth' --input '/home/zhaojin/data/TacomaBridge/capture/high-reso-clip2_rename' --output '/home/zhaojin/data/TacomaBridge/segdata/predict/high-reso-clip2_rename'"""
-    args = get_args()
+    args = get_args(raw_args)
     # args.model = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/logloss_softmax/CP12.pth'
     # in_files = ['/home/zhaojin/data/TacomaBridge/segdata/train/img/00034.png' ]
     # out_files = ['/home/zhaojin/my_path/dir/segdata/predict/00025.png']
@@ -174,7 +174,8 @@ if __name__ == "__main__":
 
     print("Model loaded !")
 
-    masks = predict_img_batch(net=net,
+
+    predict_img_batch(net=net,
                             imgpath=imgpath,
                             lblpath=lblpath,
                             scale_factor=args.scale,
@@ -187,3 +188,5 @@ if __name__ == "__main__":
     #     mask = np.transpose(mask, axes=[1,2,0])
     #     plot_img_and_mask(img, mask)
 
+if __name__ == "__main__":
+    main()

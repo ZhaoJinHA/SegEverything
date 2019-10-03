@@ -1,0 +1,13 @@
+#!/bin/bash
+trainimgpath=/home/zhaojin/data/TacomaBridge/segdata/train/img/
+trainlblpath=/home/zhaojin/data/TacomaBridge/segdata/mask/
+checkpointsavepath=/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/
+checkpointreadpath=/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/
+
+predictimgpath=/home/zhaojin/data/TacomaBridge/capture/high-reso-clip2_rename/
+predictlblpath=/home/zhaojin/data/TacomaBridge/segdata/predict/
+predictlblvizpath="$predictlblpath"viz
+
+echo $predictlblpath
+echo $predictlblvizpath
+

@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aba8e1ca-f8b2-42d9-ab10-265be7d2ba75" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/predict_batch.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_gen/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data_gen/utils/rgb2multilayers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/INTERRUPTED.pth" beforeDir="false" afterPath="$PROJECT_DIR$/INTERRUPTED.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_gen/database_genertation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/database_genertation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_gen/img_augmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/img_augmentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_gen/utils/img_distortion_my.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/utils/img_distortion_my.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/data_vis.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/data_vis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/load.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/load.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predict_batch.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict_batch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data_gen/utils" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -51,7 +55,12 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data_gen" />
+      <recent name="$PROJECT_DIR$/data_gen/utils" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data_gen/utils" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -67,7 +76,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.img_augmentation">
+    <configuration name="img_augmentation" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="SegEverything" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/data_gen" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/data_gen/img_augmentation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SegEverything" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -92,6 +122,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.img_augmentation" />
         <item itemvalue="Python.train" />
       </list>
     </recent_temporary>

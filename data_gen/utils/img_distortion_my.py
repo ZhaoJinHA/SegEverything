@@ -17,7 +17,7 @@ def elastic_transform(image, alpha, sigma, alpha_affine, random_state=None):
      Based on https://gist.github.com/erniejunior/601cdf56d2b424757de5
     """
     if random_state is None:
-        random_state = np.random.RandomState(None)
+        random_state = np.random.RandomState(None)    # random_state.rand(a,b) will generate a rand array with size (a, b) and range(0,1)
 
     shape = image.shape
     shape_size = shape[:2]
