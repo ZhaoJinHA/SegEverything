@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aba8e1ca-f8b2-42d9-ab10-265be7d2ba75" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_gen/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data_gen/utils/rgb2multilayers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/INTERRUPTED.pth" beforeDir="false" afterPath="$PROJECT_DIR$/INTERRUPTED.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_gen/database_genertation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/database_genertation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_gen/img_augmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/img_augmentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_gen/utils/img_distortion_my.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_gen/utils/img_distortion_my.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/predict_batch.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict_batch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_and_predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/train_and_predict.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -5,4 +5,5 @@ checkpoints/
 *.jpg
 dicetest.py
 unettest.py
+train_and_predict
 
