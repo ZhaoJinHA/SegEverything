@@ -12,10 +12,10 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 
 ## Independence
 
-- now work in windows 10. However, it is easy to modified to Ubuntu
+- now work in windows 10~~. However, it is easy to modified to ~~ and Ubuntu
 
 - python >= 3.6
-- installing [labelme](<https://gist.github.com/erniejunior/601cdf56d2b424757de5>)
+- ~~installing [labelme](<https://gist.github.com/erniejunior/601cdf56d2b424757de5>)~~
 
 - pytorch with version >= 0.4.1
 
@@ -57,8 +57,8 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 - [x] convert the label from labelme format to numpy.npz format
 - [x] complete the data generation code
 - [x] change the loss function in Pytorch-unet project from log loss function to weight loss function, and other modification
-- [ ] make all the workflow more auto
-- [ ] make it work in Ubuntu
+- [x] make all the workflow more auto, use ./train_and_predict.py and ./data_gen/database_test.py
+- [x] make it work in Ubuntu
 
 
 
