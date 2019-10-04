@@ -12,7 +12,7 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 
 ## Independence
 
-- now work in windows 10~~. However, it is easy to modified to ~~ and Ubuntu
+- now work in windows 10 ~~. However, it is easy to modified to~~ and Ubuntu
 
 - python >= 3.6
 - ~~installing [labelme](<https://gist.github.com/erniejunior/601cdf56d2b424757de5>)~~
@@ -26,7 +26,8 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 
 ![label-example](<https://github.com/ZhaoJinHA/SegEverything/blob/master/label_example.png>)
 
-<center> figure 1: rgb label example </center>
+<center>figure 1: rgb label example</center>
+
 
 - To predict a picture: example
 
