@@ -9,6 +9,8 @@ A simple tool to help to train a semantic segmentation network for a video or a 
 - train a U-net-like network
 
 
+## Hardware
+- Nvidia Graphic cards for cuda trainning.
 
 ## Independence
 
