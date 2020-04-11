@@ -24,6 +24,7 @@ def hsv2color_map(hsv, numcls):
     color_map[np.where((((0<=h) & (h<=15)) | ((350<=h) & (h<=360))) & (s>=0.5) )] = 1
     color_map[np.where(((100<=h) & (h<=140))& (s>=0.5))] = 2
     color_map[np.where(((45<=h) & (h<=60))& (s>=0.5))] = 3
+    color_map[np.where(((200 <= h) & (h <= 280)) & (s >= 0.5))] = 4
     print(h)
     print(color_map)
     
@@ -44,11 +45,11 @@ def multilayers_save(labels, path):
 
 def get_args(raw_args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--rgbpicfile', '-r', default="/home/zhaojin/Nutstore Files/Nutstore/Annotation/frame20190505_150247.316/label.png",
+    parser.add_argument('--rgbpicfile', '-r', default='/home/zhaojin/NutstoreFiles/Nutstore/maanshan/马鞍山大桥抖振资料/label_result2/label.png',
                         help="Specify the rgblabel file path"
                              " (default : 'MODEL.pth')")
 
-    parser.add_argument('--output', '-o', default="/home/zhaojin/Nutstore Files/Nutstore/Annotation/frame20190505_150247.316/frame00002.npz",
+    parser.add_argument('--output', '-o', default='/home/zhaojin/data/maanshan/segdata/maanshan.npz',
                         help='filenames of ouput images')
 
     return parser.parse_args(raw_args)
@@ -56,11 +57,16 @@ def get_args(raw_args=None):
 def rgblbl2npz(raw_args=None):
     args = get_args(raw_args)
     rgbpicfile = args.rgbpicfile
+    print('rgbpicfile', rgbpicfile)
     npzfile = args.output
     img = Image.open(rgbpicfile).convert("RGB")
 
-
-    lbl_lay = rgb2multilayers(img, 4)
+    numcls = 3
+    lbl_lay = rgb2multilayers(img, numcls)
+    lay0 = lbl_lay[..., 2]
+    print('lay0.shape', lay0.shape)
+    print('np.max(lay0)', np.max(lay0))
+    print('np.sum(lay0)', np.sum(lay0))
 
 
     multilayers_save(lbl_lay, npzfile)
@@ -82,13 +88,21 @@ def rgblbl2npz(raw_args=None):
     ax1.imshow(lbl_lay[:, :, 1])
     ax1.set_aspect(1)
 
-    ax2 = fig.add_subplot(143)
-    ax2.imshow(lbl_lay[:, :, 2])
-    ax2.set_aspect(1)
+    ax1 = fig.add_subplot(143)
+    ax1.imshow(lbl_lay[:, :, 2])
+    ax1.set_aspect(1)
 
-    ax3 = fig.add_subplot(144)
-    ax3.imshow(lbl_lay[:, :, 3])
-    ax3.set_aspect(1)
+
+    ax1.set_aspect(1)
+
+
+    # ax2 = fig.add_subplot(143)
+    # ax2.imshow(lbl_lay[:, :, 3])
+    # ax2.set_aspect(1)
+    #
+    # ax3 = fig.add_subplot(144)
+    # ax3.imshow(lbl_lay[:, :, 4])
+    # ax3.set_aspect(1)
 
 
 

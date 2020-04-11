@@ -117,4 +117,6 @@ def main(raw_args=None):
     datanum=args.datanum
     database_gen(imgpath, labelpath, True,  outpath, lumi, noise,datanum=datanum)
 if __name__ == '__main__':
-    main()
+    main(['--img', '/home/zhaojin/data/maanshan/segdata/img.png', '--label', '/home/zhaojin/data/maanshan/segdata/maanshan.npz',
+          '--output', '/home/zhaojin/data/maanshan/segdata/train/', '--datanum', '5000'])
+

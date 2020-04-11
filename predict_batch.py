@@ -18,6 +18,10 @@ import matplotlib.pyplot as plt
 from torch.utils import data
 
 
+def safecreate(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
 
 def predict_img_batch(net,
                 imgpath,
@@ -189,4 +193,11 @@ def main(raw_args=None):
     #     plot_img_and_mask(img, mask)
 
 if __name__ == "__main__":
-    main()
+    modelpath = '/home/zhaojin/data/TacomaBridge/segdata/train/checkpoint/weight_logloss_softmax/CP30.pth'
+    inputpath = '/home/zhaojin/NutstoreFiles/Nutstore/tacoma_data/high-reso-clip-2ep'
+    outputpath = '/home/zhaojin/data/TacomaBridge/paradata/predict_realdata2/2ep'
+    safecreate(outputpath)
+
+    codeinput = ['--model', modelpath, '--input', inputpath, '--output', outputpath]
+
+    main(codeinput)

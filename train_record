@@ -1,0 +1,9 @@
+python database_genertation.py -i /home/zhaojin/NutstoreFiles/Nutstore/tacoma_data/girder2cls/frame20190505_150247.316.png \
+-b /home/zhaojin/NutstoreFiles/Nutstore/tacoma_data/girder2cls/label316_layers.npz \
+-o /home/zhaojin/data/TacomaBridge/segdata/girder2cls_data/ \
+-d 2000
+
+python database_genertation.py -i /home/zhaojin/NutstoreFiles/Nutstore/tacoma_data/girder2cls/frame20190505_150250.960.png \
+-b /home/zhaojin/NutstoreFiles/Nutstore/tacoma_data/girder2cls/label960_layers.npz \
+-o /home/zhaojin/data/TacomaBridge/segdata/girder2cls_data/960/ \
+-d 2000

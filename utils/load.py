@@ -35,6 +35,7 @@ def to_cropped_masks(ids, dir, suffix, scale):
         filename = dir + '/' + id + suffix
         maskarray = np.load(filename)['label']
         im = resize_and_crop_masks(maskarray, scale=scale)
+        print('im.shape', im.shape )
         # print('mask.shape', im.shape)
         yield get_square(im, pos)
 
@@ -49,6 +50,34 @@ def get_imgs_and_masks(ids, dir_img, dir_mask, scale):
     imgs_normalized = map(normalize, imgs_switched)
 
     masks = to_cropped_masks(ids, dir_mask, '_mask.npz', scale)
+
+
+    return zip(imgs_normalized, masks)
+
+def to_cropped_masks_2ep_clip3(ids, dir, suffix, scale):
+    """From a list of tuples, returns the correct cropped img"""
+    for id, pos in ids:
+        filename = dir + '/' + id + suffix
+        maskarray = np.load(filename)['label']
+        im0 = resize_and_crop_masks(maskarray, scale=scale)
+
+        im = im0[:, :, 0:5:2]
+
+        # print('mask.shape', im.shape)
+        yield get_square(im, pos)
+
+def get_imgs_and_masks_2ep_clip3(ids, dir_img, dir_mask, scale):
+    """Return all the couples (img, mask)"""
+
+    imgs = to_cropped_imgs(ids, dir_img, '.png', scale)
+
+
+    # need to transform from HWC to CHW
+    imgs_switched = map(hwc_to_chw, imgs)
+    imgs_normalized = map(normalize, imgs_switched)
+
+    masks = to_cropped_masks_2ep_clip3(ids, dir_mask, '_mask.npz', scale)
+
 
     return zip(imgs_normalized, masks)
 
